@@ -18,8 +18,6 @@ type GatewayInfo struct {
 	Ip            string    `json:"ip"`            // gateway ip
 }
 
-type GetGatewayInfoResponse GatewayInfo
-
 type SensorInfo struct {
 	Id          string `json:"_id"`
 	Priority    int    `json:"priority"`
@@ -35,9 +33,6 @@ type SensorInfo struct {
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
-
-type GetSensorsResponse []SensorInfo
-type GetSensorResponse SensorInfo
 
 type SensorData struct {
 	Id                    string `json:"_id"`
@@ -65,12 +60,20 @@ type GatewayData struct {
 	Soc                           int          `json:"soc"`
 }
 
+type GetGatewayInfoResponse GatewayInfo
+
+type GetSensorsResponse []SensorInfo
+
+type GetSensorResponse SensorInfo
+
+type GetGatewayDataResponse GatewayData
+
 type GetSensorDataResponse struct {
 	Date time.Time  `json:"date"`
 	Data SensorData `json:"data"`
 }
 
-type SensorConsumptionStatistics struct {
+type GetSensorConsumptionStatisticsResponse struct {
 	SensorId string `json:"sensorId"`
 	Period   string `json:"period"`
 	Data     []struct {
@@ -80,7 +83,7 @@ type SensorConsumptionStatistics struct {
 	TotalConsumption float64 `json:"totalConsumption"`
 }
 
-type GatewayConsumptionStatistics struct {
+type GetGatewayConsumptionStatisticsResponse struct {
 	GatewayId string `json:"gatewayId"`
 	Period    string `json:"period"`
 	Data      []struct {
@@ -138,14 +141,22 @@ const (
 	Defrosting
 )
 
+type StatisticPeriod string
+
+const (
+	Day   = "day"
+	Month = "month"
+	Year  = "year"
+)
+
 func (c *Client) GetGatewayInfo(solarManagerID string) (GetGatewayInfoResponse, error) {
 	u := fmt.Sprintf("v1/info/gateway/%s", url.PathEscape(solarManagerID))
 
+	var response GetGatewayInfoResponse
 	req, err := c.NewRequest("GET", u, nil)
 	if err != nil {
-		return GetGatewayInfoResponse{}, err
+		return response, err
 	}
-	var response GetGatewayInfoResponse
 	_, err = c.do(req, &response)
 	return response, err
 }
@@ -153,11 +164,111 @@ func (c *Client) GetGatewayInfo(solarManagerID string) (GetGatewayInfoResponse, 
 func (c *Client) GetSensors(solarManagerID string) (GetSensorsResponse, error) {
 	u := fmt.Sprintf("v1/info/sensors/%s", url.PathEscape(solarManagerID))
 
+	var response GetSensorsResponse
 	req, err := c.NewRequest("GET", u, nil)
 	if err != nil {
-		return GetSensorsResponse{}, err
+		return response, err
 	}
-	var response GetSensorsResponse
+	_, err = c.do(req, &response)
+	return response, err
+}
+
+func (c *Client) GetSensor(sensorID string) (GetSensorResponse, error) {
+	u := fmt.Sprintf("v1/info/sensor/%s", url.PathEscape(sensorID))
+
+	var response GetSensorResponse
+	req, err := c.NewRequest("GET", u, nil)
+	if err != nil {
+		return response, err
+	}
+	_, err = c.do(req, &response)
+	return response, err
+}
+
+func (c *Client) GetGatewayData(solarManagerID string) (GetGatewayDataResponse, error) {
+	u := fmt.Sprintf("v1/info/stream/gateway/%s", url.PathEscape(solarManagerID))
+
+	var response GetGatewayDataResponse
+	req, err := c.NewRequest("GET", u, nil)
+	if err != nil {
+		return response, err
+	}
+	_, err = c.do(req, &response)
+	return response, err
+}
+
+func (c *Client) GetSensorConsumptionStatistics(sensorID string, period StatisticPeriod) (GetSensorConsumptionStatisticsResponse, error) {
+	u := fmt.Sprintf("v1/consumption/sensor/%s?period=%s",
+		url.PathEscape(sensorID),
+		url.QueryEscape(string(period)))
+
+	var response GetSensorConsumptionStatisticsResponse
+	req, err := c.NewRequest("GET", u, nil)
+	if err != nil {
+		return response, err
+	}
+	_, err = c.do(req, &response)
+	return response, err
+}
+
+func (c *Client) GetGatewayConsumptionStatistics(solarManagerID string, period StatisticPeriod) (GetGatewayConsumptionStatisticsResponse, error) {
+	u := fmt.Sprintf("v1/consumption/gateway/%s?period=%s",
+		url.PathEscape(solarManagerID),
+		url.QueryEscape(string(period)))
+
+	var response GetGatewayConsumptionStatisticsResponse
+	req, err := c.NewRequest("GET", u, nil)
+	if err != nil {
+		return response, err
+	}
+	_, err = c.do(req, &response)
+	return response, err
+}
+
+func (c *Client) GetSensorData(solarManagerID string, sensorID string) (GetSensorDataResponse, error) {
+	u := fmt.Sprintf("v1/stream/sensor/%s/%s", url.PathEscape(solarManagerID), url.PathEscape(sensorID))
+
+	var response GetSensorDataResponse
+	req, err := c.NewRequest("GET", u, nil)
+	if err != nil {
+		return response, err
+	}
+	_, err = c.do(req, &response)
+	return response, err
+}
+
+func (c *Client) GetGatewayPieChart(solarManagerID string) (GetGatewayPieChartResponse, error) {
+	u := fmt.Sprintf("v1/chart/gateway/%s", url.PathEscape(solarManagerID))
+
+	var response GetGatewayPieChartResponse
+	req, err := c.NewRequest("GET", u, nil)
+	if err != nil {
+		return response, err
+	}
+	_, err = c.do(req, &response)
+	return response, err
+}
+
+func (c *Client) GetGatewayForecast(solarManagerID string) (GetGatewayForecastResponse, error) {
+	u := fmt.Sprintf("v1/forecast/gateways/%s", url.PathEscape(solarManagerID))
+
+	var response GetGatewayForecastResponse
+	req, err := c.NewRequest("GET", u, nil)
+	if err != nil {
+		return response, err
+	}
+	_, err = c.do(req, &response)
+	return response, err
+}
+
+func (c *Client) GetLowRateTariff(solarManagerID string) (GetLowRateTariffResponse, error) {
+	u := fmt.Sprintf("v1/low-rate-tariff/gateways/%s", url.PathEscape(solarManagerID))
+
+	var response GetLowRateTariffResponse
+	req, err := c.NewRequest("GET", u, nil)
+	if err != nil {
+		return response, err
+	}
 	_, err = c.do(req, &response)
 	return response, err
 }
