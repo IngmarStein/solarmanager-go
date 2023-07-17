@@ -1,3 +1,3 @@
-module solarmanager-go
+module github.com/ingmarstein/solarmanager-go
 
 go 1.20
