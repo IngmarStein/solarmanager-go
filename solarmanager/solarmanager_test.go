@@ -298,7 +298,7 @@ func TestGetSensors(t *testing.T) {
 	}
 }
 
-func ExampleGetSensors() {
+func ExampleClient_GetSensors() {
 	username := os.Getenv("SOLARMANAGER_USERNAME")
 	password := os.Getenv("SOLARMANAGER_PASSWORD")
 	smID := os.Getenv("SOLARMANAGER_ID")
