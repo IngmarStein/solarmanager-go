@@ -65,16 +65,16 @@ type GetGatewayInfoResponse struct {
 	Gateway GatewayInfo `json:"gateway"`
 
 	Settings struct {
-		OffsetWatt     int    `json:"offset_watt"`
-		LowMFFrom      string `json:"low_m_f_from"`
-		LowMFTo        string `json:"low_m_f_to"`
-		LowSatFrom     string `json:"low_sat_from"`
-		LowSatTo       string `json:"low_sat_to"`
-		LowSunFrom     string `json:"low_sun_from"`
-		LowSunTo       string `json:"low_sun_to"`
-		KWp            int    `json:"kWp"`
-		HouseFuse      int    `json:"houseFuse"`
-		LoadManagement bool   `json:"loadManagement"`
+		OffsetWatt     int     `json:"offset_watt"`
+		LowMFFrom      string  `json:"low_m_f_from"`
+		LowMFTo        string  `json:"low_m_f_to"`
+		LowSatFrom     string  `json:"low_sat_from"`
+		LowSatTo       string  `json:"low_sat_to"`
+		LowSunFrom     string  `json:"low_sun_from"`
+		LowSunTo       string  `json:"low_sun_to"`
+		KWp            float64 `json:"kWp"`
+		HouseFuse      int     `json:"houseFuse"`
+		LoadManagement bool    `json:"loadManagement"`
 		CommonSeasons  struct {
 			MondayFriday []struct {
 				From   string `json:"from"`

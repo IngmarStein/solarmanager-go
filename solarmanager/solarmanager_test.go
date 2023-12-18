@@ -15,17 +15,94 @@ func newTestServer() *httptest.Server {
 	mux.HandleFunc("/v1/info/gateway/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`
 {
-	"gateway": {
-		"_id": "5c8fb8e7cdcda169da9d5fe3",
-		"signal": "connected",
-		"name": "1234123412341234",
-		"sm_id": "1234123412341234",
-		"owner": "5c8fb8fccdcda169da000000",
-		"firmware": "0.20.1",
-		"lastErrorDate": "2021-01-20T06:00:01.150Z",
-		"mac": "2C:3E:51:00:00:00",
-		"ip": "192.168.1.51"
+  "gateway": {
+	"_id": "5c8fb8e7cdcda169da9d5fe3",
+	"signal": "connected",
+	"name": "1234123412341234",
+	"sm_id": "1234123412341234",
+	"owner": "5c8fb8fccdcda169da000000",
+	"firmware": "0.20.1",
+	"lastErrorDate": "2021-01-20T06:00:01.150Z",
+	"mac": "2C:3E:51:00:00:00",
+	"ip": "192.168.1.51"
+  },
+  "settings": {
+	"offset_watt": 50,
+	"low_m_f_from": "20:00",
+	"low_m_f_to": "07:00",
+	"low_sat_from": "00:00",
+	"low_sat_to": "07:00",
+	"low_sun_from": "00:00",
+	"low_sun_to": "07:00",
+	"houseFuse": 32,
+	"kWp": 24.489999771118164,
+	"loadManagement": true,
+	"commonSeasons": {
+	  "sunday": [
+		{
+		  "from": "00:00",
+		  "tariff": "low"
+		}
+	  ],
+	  "mondayFriday": [
+		{
+		  "from": "00:00",
+		  "tariff": "low"
+		},
+		{
+		  "tariff": "high",
+		  "from": "07:00"
+		},
+		{
+		  "from": "20:00",
+		  "tariff": "low"
+		}
+	  ],
+	  "saturday": [
+		{
+		  "tariff": "low",
+		  "from": "00:00"
+		}
+	  ]
+	},
+	"highTariff": 0.24,
+	"isWinterTimeEnabled": false,
+	"lowTariff": 0.19,
+	"provider": null,
+	"tariffType": "double",
+	"winterSeason": {
+	  "sunday": [
+		{
+		  "tariff": "low",
+		  "from": "00:00"
+		}
+	  ],
+	  "mondayFriday": [
+		{
+		  "from": "00:00",
+		  "tariff": "low"
+		},
+		{
+		  "from": "07:00",
+		  "tariff": "high"
+		},
+		{
+		  "from": "20:00",
+		  "tariff": "low"
+		}
+	  ],
+	  "saturday": [
+		{
+		  "tariff": "low",
+		  "from": "00:00"
+		},
+		{
+		  "from": "07:00",
+		  "tariff": "high"
+		}
+	  ]
 	}
+  }
 }
 `))
 	})
