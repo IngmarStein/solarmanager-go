@@ -7,15 +7,16 @@ import (
 )
 
 type GatewayInfo struct {
-	Id            string    `json:"_id"`           // db id for gateway
-	Signal        string    `json:"signal"`        // gateway signal
-	Name          string    `json:"name"`          // gateway name in system
-	SmId          string    `json:"sm_id"`         // gateway unique id
-	Owner         string    `json:"owner"`         // id of user - owner of gateway
-	Firmware      string    `json:"firmware"`      // gateway firmware version
-	LastErrorDate time.Time `json:"lastErrorDate"` // date of last error
-	Mac           string    `json:"mac"`           // gateway mac address
-	Ip            string    `json:"ip"`            // gateway ip
+	Id                      string    `json:"_id"`    // db id for gateway
+	Signal                  string    `json:"signal"` // gateway signal
+	Name                    string    `json:"name"`   // gateway name in system
+	SmId                    string    `json:"sm_id"`  // gateway unique id
+	Owner                   string    `json:"owner"`  // id of user - owner of gateway
+	IsInstallationCompleted bool      `json:"isInstallationCompleted"`
+	Firmware                string    `json:"firmware"`      // gateway firmware version
+	LastErrorDate           time.Time `json:"lastErrorDate"` // date of last error
+	Mac                     string    `json:"mac"`           // gateway mac address
+	Ip                      string    `json:"ip"`            // gateway ip
 }
 
 type SensorInfo struct {
@@ -60,7 +61,72 @@ type GatewayData struct {
 	Soc                           int          `json:"soc"`
 }
 
-type GetGatewayInfoResponse GatewayInfo
+type GetGatewayInfoResponse struct {
+	Gateway GatewayInfo `json:"gateway"`
+
+	Settings struct {
+		OffsetWatt     int    `json:"offset_watt"`
+		LowMFFrom      string `json:"low_m_f_from"`
+		LowMFTo        string `json:"low_m_f_to"`
+		LowSatFrom     string `json:"low_sat_from"`
+		LowSatTo       string `json:"low_sat_to"`
+		LowSunFrom     string `json:"low_sun_from"`
+		LowSunTo       string `json:"low_sun_to"`
+		KWp            int    `json:"kWp"`
+		HouseFuse      int    `json:"houseFuse"`
+		LoadManagement bool   `json:"loadManagement"`
+		CommonSeasons  struct {
+			MondayFriday []struct {
+				From   string `json:"from"`
+				Tariff string `json:"tariff"`
+			} `json:"mondayFriday"`
+			Saturday []struct {
+				From   string `json:"from"`
+				Tariff string `json:"tariff"`
+			} `json:"saturday"`
+			Sunday []struct {
+				From   string `json:"from"`
+				Tariff string `json:"tariff"`
+			} `json:"sunday"`
+		} `json:"commonSeasons"`
+		HighTariff          float64 `json:"highTariff"`
+		IsWinterTimeEnabled bool    `json:"isWinterTimeEnabled"`
+		LowTariff           float64 `json:"lowTariff"`
+		Provider            string  `json:"provider"`
+		TariffType          string  `json:"tariffType"`
+		WinterSeason        struct {
+			MondayFriday []struct {
+				From   string `json:"from"`
+				Tariff string `json:"tariff"`
+			} `json:"mondayFriday"`
+			Saturday []struct {
+				From   string `json:"from"`
+				Tariff string `json:"tariff"`
+			} `json:"saturday"`
+			Sunday []struct {
+				From   string `json:"from"`
+				Tariff string `json:"tariff"`
+			} `json:"sunday"`
+		} `json:"winterSeason"`
+	} `json:"settings"`
+	User struct {
+		FirstName    string `json:"first_name"`
+		UserId       string `json:"user_id"`
+		LastName     string `json:"last_name"`
+		Email        string `json:"email"`
+		Status       string `json:"status"`
+		Country      string `json:"country"`
+		City         string `json:"city"`
+		Zip          string `json:"zip"`
+		Plant        string `json:"plant"`
+		CompanyName  string `json:"company_name"`
+		Company      string `json:"company"`
+		ConnectedOem string `json:"connectedOem"`
+	} `json:"user"`
+	Versions struct {
+		SupportContract bool `json:"supportContract"`
+	} `json:"versions"`
+}
 
 type GetSensorsResponse []SensorInfo
 

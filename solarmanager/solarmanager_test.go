@@ -15,15 +15,17 @@ func newTestServer() *httptest.Server {
 	mux.HandleFunc("/v1/info/gateway/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`
 {
-	"_id": "5c8fb8e7cdcda169da9d5fe3",
-	"signal": "connected",
-	"name": "1234123412341234",
-	"sm_id": "1234123412341234",
-	"owner": "5c8fb8fccdcda169da9d5fe4",
-	"firmware": "0.20.1",
-	"lastErrorDate": "2021-01-20T06:00:01.150Z",
-	"mac": "2C:3E:51:C5:A0:CA",
-	"ip": "192.168.1.51"
+	"gateway": {
+		"_id": "5c8fb8e7cdcda169da9d5fe3",
+		"signal": "connected",
+		"name": "1234123412341234",
+		"sm_id": "1234123412341234",
+		"owner": "5c8fb8fccdcda169da000000",
+		"firmware": "0.20.1",
+		"lastErrorDate": "2021-01-20T06:00:01.150Z",
+		"mac": "2C:3E:51:00:00:00",
+		"ip": "192.168.1.51"
+	}
 }
 `))
 	})
@@ -275,8 +277,8 @@ func TestGetGatewayInfo(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if resp.Owner != "5c8fb8fccdcda169da9d5fe4" {
-		t.Fatalf("unexpected owner, expected 5c8fb8fccdcda169da9d5fe4, but got %s", resp.Owner)
+	if resp.Gateway.Owner != "5c8fb8fccdcda169da000000" {
+		t.Fatalf("unexpected owner, expected 5c8fb8fccdcda169da000000, but got %s", resp.Gateway.Owner)
 	}
 }
 
